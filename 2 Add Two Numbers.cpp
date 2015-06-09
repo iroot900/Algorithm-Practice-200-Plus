@@ -12,21 +12,18 @@ public:
         {
             if(pu!=nullptr&&pd!=nullptr)
             {
-                 sum=pu->val+pd->val+carry;
+                sum=pu->val+pd->val+carry;
                 pu=pu->next;pd=pd->next;
             }
             else if(pu!=nullptr)
             {
-                 sum=pu->val+carry;
-                pu=pu->next;
+                sum=pu->val+carry; pu=pu->next;
             }
             else
             {   
-                 sum=pd->val+carry;
-                pd=pd->next;
+                sum=pd->val+carry;pd=pd->next;
             }
-            digit=sum%10;
-            carry=sum/10;
+            digit=sum%10;carry=sum/10;
             pcur->next=new ListNode(digit);
             pcur=pcur->next;
         }
