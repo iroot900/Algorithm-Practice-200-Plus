@@ -1,6 +1,8 @@
 class Solution {
 public:
-
+    //I'm not happy with this solution. too easy to make a mistake. 
+    //The argument use to be array[] which make things way more easy to handle by passing array address
+    
     double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
         int m=nums1.size(),n=nums2.size();
         int len=m+n;                   
