@@ -1,43 +1,37 @@
 class Solution {
 public:
     int lengthOfLongestSubstringTwoDistinct(string s) {
-        //logic   ---- go till a third one show up....  then, move to the one start. 
-        // main
-        // boudnary
-        unordered_set<char> set;
-        int longest=0;
-        int len=0;
+        unordered_map<char,int> dict;
+        int count=0;
         int start=0;
-        int next=0;
-        
-        int n=s.size();
-        if(n<3) return n;
-        set.insert(s[0]);
-        int i=1;
-        for(;i<n;++i)
+        int len=0;
+        for(int i=0;i<s.size();++i)
         {
-            if(set.size()<2) 
+            if(dict.count(s[i])==0) // find a new cha. 
             {
-                set.insert(s[i]);
-                if(s[i]!=s[start])
-                next=i;
+                if(count<2){ dict[s[i]]++ ; ++count;}// not two add one. 
+                else // count is two . already have two distince remove previous till only one unique 
+                {
+                    len=max(len,i-start);
+                    for(int j=start;j<i;++j)
+                    {
+                            dict[s[j]]--;
+                            if(dict[s[j]]==0)
+                            {
+                                dict.erase(s[j]); 
+                                start=j+1;
+                                break;
+                            }
+                    }
+                    dict[s[i]]++;
+                }
             }
-            else if(set.find(s[i])==set.end())// new char shows up
+            else 
             {
-                set.erase(s[next-1]);
-                longest=max(longest,i-start);
-                start=next;
-                set.insert(s[i]);
-                next=i;
+                dict[s[i]]++ ;
             }
-            else // old again  aaaabbaaaaa 
-            {
-                if(s[i]!=s[next])
-                next=i;
-            }
-            // if a new one show's up... go to next and update longest;
-            // else . update the next
         }
-        return max(longest,i-start);
+        len=max(len,(int)s.size()-start);
+        return len;
     }
 };
