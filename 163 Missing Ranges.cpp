@@ -1,52 +1,21 @@
 class Solution {
 public:
     vector<string> findMissingRanges(vector<int>& nums, int lower, int upper) {
-        int n=nums.size();
+        int previous=lower-1; 
         vector<string> result;
-        string solu;
-        if(n==0) 
+        for(int i=0;i<nums.size();++i)
         {
-            solu+=to_string(lower);
-            if(lower<upper) {solu+="->"; solu+=to_string(upper);}
-            result.push_back(solu);
-            return result;
-        }
-        
-        int left=lower, right;
-        for(int i=0;i<n;++i)
-        {
-            if(nums[i]<lower) continue;
-            if(nums[i]==lower)
+            if(nums[i]==previous+1) {previous=nums[i];}
+            else 
             {
-                ++left;++lower;
-            }
-            else if(nums[i]>lower)
-            {
-                if(nums[i]>upper)
-                {
-                    right=upper;
-                    solu+=to_string(left);
-                    if(left<right) {solu+="->"; solu+=to_string(right);}
-                    result.push_back(solu);
-                    return result;
-                }
-                    right=nums[i]-1;
-                    solu+=to_string(left);
-                    if(left<right) {solu+="->"; solu+=to_string(right);}
-                    result.push_back(solu);
-                    solu.clear();
-                left=nums[i]+1;
-                lower=nums[i]+1;
+                if(previous+2==nums[i])  { result.push_back(to_string(previous+1)); }
+                else  { result.push_back( to_string(previous+1)+"->"+to_string(nums[i]-1) );}
+                previous=nums[i];
             }
         }
+        if(previous+1==upper)  { result.push_back(to_string(previous+1)); }
+        else if (previous+1<upper) { result.push_back( to_string(previous+1)+"->"+to_string(upper) );}
         
-        if(upper>nums.back())
-        {
-                right=upper;
-                solu+=to_string(left);
-                if(left<right) {solu+="->"; solu+=to_string(right);}
-                result.push_back(solu);
-        }
         return result;
     }
 };
