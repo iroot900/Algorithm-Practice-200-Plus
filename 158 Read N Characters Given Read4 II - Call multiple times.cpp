@@ -1,4 +1,3 @@
-// Forward declaration of the read4 API.
 int read4(char *buf);
 
 class Solution {
@@ -8,73 +7,38 @@ public:
      * @param n   Maximum number of characters to read
      * @return    The number of characters read
      */
-    Solution () {buffer[0]='\0';}
-    
     int read(char *buf, int n) {
-        int num=0;
         
         int i=0;
-        //
-        // a b c 
-        // du 1 2 3 4 
-        
-        // i=1  n=2;
-        // i=2;  n==3;
-        for(;i<n;++i)
+        while(!que.empty())
         {
-            if(buffer[i]!='\0')
+            if(i==n) return n;
+            buf[i++]=que.front(); que.pop();
+        } 
+        
+        int current=i;
+        for(;current+4<=n;current+=4)
+        {
+            int cha=read4(buf+current);
+            if(cha<4) return current+cha;
+        }
+         
+        int remain=n-current;
+        if(remain==0) return n;
+        else 
+        {
+            char buff[4];
+            int last=read4(buff);
+            int need=min(last,remain);
+            for(int i=0;i<last;++i) 
             {
-                buf[i]=buffer[i];
-                ++num;
+                if(i<need)   buf[current+i]=buff[i];
+                else    { que.push(buff[i]); }
             }
-            else break;
+            return current+need;
         }
-        
-        if(i==n)  //read them all needed. probabaly still reamins. 
-        {
-            int j=0;
-            for(;;++j)
-            {
-                if(buffer[j+i]=='\0') break;
-                buffer[j]=buffer[j+i];
-            }
-            buffer[j]='\0';
-            return n;
-            // there are still remaining.  should return now. or, if you keep reading, there will be overlow for buffer. 
-        }
-        else
-        buffer[0]='\0';
-        
-        //if still remain.
-        
-        for(;i+4<=n;i+=4)
-        {
-            int ret=read4(buf+i);
-            if(ret<4) 
-            {
-                return num+ret;
-            }
-            num+=4;
-        }
-        
-        char buff[4];
-        int ret=read4(buff);
-        int remain=min(ret,n-i);
-        for(int i=0;i<remain;++i)
-        {
-            buf[num+i]=buff[i];
-        }
-        
-        int j=0;
-        for(;j<ret-remain;++j)
-        {
-            buffer[j]=buff[j+remain];
-        }
-        buffer[j]='\0';
-        return remain+num;
     }
-    
-    private:
-    char buffer[5];
-    
+
+private:
+    queue<char> que;
 };
