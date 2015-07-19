@@ -6,9 +6,8 @@
 #include <unordered_set>
 using namespace std;
 
-class TreeNode
+struct TreeNode
 {
-	public:
 	int id;
 	int parentId;
 	int value;

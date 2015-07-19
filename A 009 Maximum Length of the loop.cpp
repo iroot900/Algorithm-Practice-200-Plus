@@ -29,7 +29,7 @@ int maxLoop( vector<int> & nextIndex)
 
 int main()
 {
-	vector<int> nextIndex={3,2,1,4,0};
+	vector<int> nextIndex={3,2,1,4,0,6,7,8,9,10,11,3};
 
 	cout<<maxLoop( nextIndex)<<endl;
 }
