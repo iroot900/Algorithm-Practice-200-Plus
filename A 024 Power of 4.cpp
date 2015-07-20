@@ -4,13 +4,16 @@ using namespace std;
 bool power4(int x)
 {
 	if(x<1) return false;
-	return (x&(x-1))==0&&( (x&0xAAAAAAAA)==0);
+	int even=0b10101010101010101010101010101010;
+	return (x&(x-1))==0&&( (x&even)==0);
 }
 
 int odd_even(int x)
 {
-	int odd=x&0xAAAAAAAA;
-	int even=x&0x55555555;
+//	int even=x&0xAAAAAAAA;
+//	int odd=x&0x55555555;
+	int odd=x&0b01010101010101010101010101010101;
+	int even=x&0b10101010101010101010101010101010;
 	return (odd<<1)|(even>>1);
 }
 

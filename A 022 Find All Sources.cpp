@@ -23,7 +23,6 @@ vector<int> sources(const vector<int> & arr, int p)
 
 	//result is all the nodes reachable by p. 
 	//BFS or DFS Ok
-
 	vector<int> ret;
 	unordered_set<int> visited;
 	queue<int> que; 
