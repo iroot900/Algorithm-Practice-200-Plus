@@ -6,6 +6,8 @@
  *     ListNode(int x) : val(x), next(NULL) {}
  * };
  */
+ 
+ //Method A: merge sort
 class Solution {
 public:
     ListNode* mergeKLists(vector<ListNode*>& lists) {
@@ -48,5 +50,49 @@ public:
             pcur=pcur->next;
         }
         l1=dummy.next;
+    }
+};
+
+// Method B: minHeap
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+ 
+class comp
+{
+    public:
+    bool operator () (pair<int,ListNode*> left, pair<int,ListNode*> right)  const 
+    {
+        return left.first>right.first;
+    }
+};
+
+class Solution {
+public:
+    ListNode* mergeKLists(vector<ListNode*>& lists) {
+        //use a minHeap;
+        ListNode dummy(-1);
+        ListNode* p=&dummy;
+        priority_queue<pair<int,ListNode*>,vector<pair<int,ListNode*>>, comp> heap;
+        
+        for(auto list:lists)
+        {
+            if(list) heap.push({list->val, list});
+        }
+        
+        while(!heap.empty())
+        {
+            pair<int, ListNode*> next=heap.top(); heap.pop();
+            p->next=next.second;
+            p=p->next;
+            if(next.second->next) heap.push({next.second->next->val,next.second->next});
+        }
+        
+        return dummy.next;
     }
 };
