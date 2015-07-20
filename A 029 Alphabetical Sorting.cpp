@@ -12,10 +12,9 @@ vector<string> alphabetical( vector<string>& words, const string &str)
 { 
 	unordered_map<char, int> order;
 	int index = 0; //not necessary
-	for (int i = 0; i < str.size(); ++i)
-	{
-		if (order.count(str[i]) == 0) order[str[i]] = index++;
-	}
+	for (int i = 0; i < str.size(); ++i) { if (order.count(str[i]) == 0) order[str[i]] = index++; }
+	
+	for (char cha = 'a'; cha <= 'z'; ++cha) if (order.count(cha) == 0) order[cha] = INT_MAX;
 
 	sort(begin(words), end(words), [&order](string left, string right){
 		int l = 0, r = 0;
