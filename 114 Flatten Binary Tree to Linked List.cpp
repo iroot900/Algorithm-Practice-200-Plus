@@ -1,5 +1,5 @@
 /**
- * Definition for binary tree
+ * Definition for a binary tree node.
  * struct TreeNode {
  *     int val;
  *     TreeNode *left;
@@ -9,25 +9,20 @@
  */
 class Solution {
 public:
-    void flatten(TreeNode *root) {
-        if(root==NULL) return ;
-        flatten(root->left);
-        flatten(root->right);
-        // still what we found here ?
-        // the most basic traverse. 
-        
-        
-        if(root->left==NULL) return; 
-        
-        TreeNode* end=root->left;
-        while(end->right)
-        {
-            end=end->right;
-        }
-        
-        end->right=root->right;
-        root->right=root->left;
-        
-        root->left=NULL;
+    void flatten(TreeNode* root) {
+        // first order travers.  keep right to next.  
+        TreeNode* last=nullptr;
+        toList(root, last);
+    }
+    //main logic. visit right first. return node
+    // current 
+    void toList(TreeNode* root, TreeNode* &last)
+    {
+        if(root==nullptr) return ;
+        toList(root->right, last);
+        toList(root->left, last); // there is no left right. when the node is done about go up, it should point to last 
+        root->right=last;
+        root->left=nullptr;
+        last=root;
     }
 };
