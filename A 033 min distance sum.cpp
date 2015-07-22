@@ -6,8 +6,9 @@
 #include <iomanip>
 using namespace std;
 
-void DFS(int x,int y, const vector<vector<char>>& grid, vector<vector<int>>& visited)
+void BFS(int x,int y, const vector<vector<char>>& grid, vector<vector<int>>& visited)
 {
+	// BFS. a queue and a visited map.   while() { top. pop. {for neighbor}  .three steps. done!}
 	queue<pair<int,int>> que;
 	que.push({x,y});
 	while(!que.empty())
