@@ -4,7 +4,7 @@ I find leetcode modifying the input parameters of a solution from time to time, 
 
 >leetcode
 
-224/224
+225/225
 
 >other interesting topics 
 
