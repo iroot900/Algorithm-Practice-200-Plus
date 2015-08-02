@@ -1,13 +1,11 @@
 class Solution {
 public:
-    int rangeBitwiseAnd(int m, int n) {
-        int ret=0;
+    int rangeBitwiseAnd(int m, int n) { 
         
-        for(int i=0;i<32&&m;++i)
+        for(int i=30;i>=0;--i)
         {
-            if(n-m==0&&(n&1)) ret+=(1<<i);
-            n=n>>1;m=m>>1;
+            if ((m>>i)!=(n>>i)) return (m>>i+1)<<(i+1);
         }
-        return ret;
+        return m;
     }
 };
