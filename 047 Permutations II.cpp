@@ -1,34 +1,29 @@
 class Solution {
 public:
-    vector<vector<int>> permuteUnique(vector<int>& nums) {
-        sort(begin(nums),end(nums));
-        unordered_map<int,int> remains;
-        for(auto x:nums) remains[x]++;
-        
-        vector<int> solution;
-        vector<vector<int>> result;
-         DFS(0, nums,result, solution, remains);
-        return result;
-    }
-    
-    void DFS(int depth, vector<int>& nums,vector<vector<int>> &result,vector<int>& solution,unordered_map<int,int>& remains)
+     void DFS(vector<bool>& used, vector<int>& nums, vector<vector<int>>& result, vector<int>& solu)
     {
-        if(depth==nums.size())
-        {
-            result.push_back(solution);
-            return;
-        }
-        for(int i=0;i<nums.size();i++)
-        {
-            if(i>0&&nums[i]==nums[i-1]) continue;
-            if(remains[nums[i]]>0)
-            {
-                remains[nums[i]]--;
-                solution.push_back(nums[i]);
-                DFS(depth+1, nums,result, solution, remains);
-                solution.pop_back();
-                remains[nums[i]]++;
-            }
-        }
+    	if (solu.size() == nums.size()) { result.push_back(solu); return; }
+    	for (int i = 0; i < nums.size(); ++i)
+    	{
+    		if (!used[i])
+    		{
+    			used[i] = true;
+    			solu.push_back(nums[i]);
+    			DFS(used, nums, result, solu);
+    			solu.pop_back();
+    			used[i] = false;
+    			while (i + 1<nums.size() && nums[i + 1] == nums[i]) ++i; // same level no twice // 
+    		}
+    	}
+    }
+
+    vector<vector<int>> permuteUnique(vector<int>& nums) {
+    	sort(begin(nums), end(nums));
+    	vector<int> solu;
+    	vector<vector<int>> result;
+    	int n = nums.size();
+    	vector<bool> used(n, false);
+    	DFS(used, nums, result, solu);
+    	return result;
     }
 };
