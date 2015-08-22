@@ -8,16 +8,11 @@
  */
 class Solution {
 public:
-    void deleteNode(ListNode* node) { // node 3. 
-    // logic:
-    // move value next to current. 
-    // set last one as nullptr;
-    auto pcur=node;
-    while(1)
-    {
-        pcur->val=pcur->next->val;
-        if(!pcur->next->next) {auto next=pcur->next; pcur->next=nullptr; delete next; return;}
-        else pcur=pcur->next;
-    }
+    void deleteNode(ListNode* node) {
+        //1 2 3 4 
+        auto next=node->next->next;
+        node->val=node->next->val;
+        delete node->next;
+        node->next=next;
     }
 };
