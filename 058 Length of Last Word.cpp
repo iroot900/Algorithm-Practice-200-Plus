@@ -1,26 +1,17 @@
 class Solution {
 public:
     int lengthOfLastWord(string s) {
-        int n=s.size();
-        int start=-1;
-        int i=0;
-        int lastLen=0;
-      //  if(n==0) return 0;
-        for(;i<n;++i)
+        int start=0; 
+        int end=0;
+        int len=0;
+        while(1)
         {
-            if(s[i]==' ') 
-            {
-                lastLen=i-start-1;
-                start=i;
-             while(i+1<n&&s[i+1]==' ')
-             {
-                 ++i;
-                 start=i;
-             }
-             }
-
+            start=s.find_first_not_of("     ",end);
+            if(start==string::npos) break;
+            end=s.find_first_of("   ",start);
+            if(end==string::npos) end=s.size();
+            len=end-start;
         }
-        if(s[i-1]==' ') return lastLen;
-        return i-1-start;
+        return len;
     }
 };
