@@ -1,77 +1,134 @@
 #include <iostream>
 using namespace std;
-struct node
+
+class TreeNode
 {
-	node(int x):val(x){}
-	int val;
-	node* left=nullptr;
-	node* right=nullptr;
+	public:
+		TreeNode(int x):val(x){}
+		int val;
+		TreeNode* left=nullptr;
+		TreeNode* right=nullptr;
 };
 
-void travel(node* root)
+//add this is fun use &
+void add(TreeNode*& root, int x)
 {
-	if(!root) return; 
-	travel(root->left);
-	cout<<root->val<<" ";
-	travel(root->right);
-}
-
-void add(node* &root, int x)
-{
-	if(root==nullptr) {root=new node(x); return ;}
-	if(root->val>x) add(root->left,x);
+	if(!root) {root=new TreeNode(x); return ;}
+	if(root->val>x)  add(root->left, x);
 	else add(root->right,x);
 }
 
-bool find(node* root,int val)
+void print(TreeNode* root)
+{
+	if(!root) return;
+	print(root->left);
+	cout<<root->val<<" ";
+	print(root->right);
+}
+
+void erase(TreeNode*& root, int x)
+{
+	//when the node found and only one child.  child up 
+	//if both child. 
+	//swap value with next inorder. 
+	// delete inroder node. 
+	if(!root) return;
+	if(root->val>x) erase(root->left,x);
+	else if(root->val<x) erase(root->right,x);
+	else if(root->val==x) 
+	{
+		if(!root->left) 
+		{
+			auto node=root;
+			root=root->right; delete node;
+		}
+		else if(!root->right)
+		{
+			auto node=root;
+			root=root->left; delete node;
+		}
+		else  // find the inorder successor
+		{
+			auto next=root->right;
+			while(next->left) next=next->left;
+			//swap(next->val,root->val);
+			root->val=next->val;
+			erase(root->right,next->val);
+		}
+	}
+}
+
+TreeNode* find(TreeNode* root, int x)
 {
 	auto cur=root;
 	while(cur)
 	{
-		if(cur->val==val) return true;
-		else if(cur->val>val) cur=cur->left;
+		if(cur->val==x) return cur;
+		if(cur->val>x) cur=cur->left;
 		else cur=cur->right;
 	}
-	return false;
+	return nullptr;
 }
 
-
-// go deep do nothing. then return do things!
-// can't return directly as LCA.. slightly different
-int distance(node* root, int a, int b)
+int dist(TreeNode* root, int a, int b, int& len)
 {
-	if(root==nullptr) return 0;
-	int left=distance(root->left, a,b);
-	int right=distance(root->right, a,b);
-
-	//starting from here, it's all go back.  
-	//if found one and the other already found.  
-	if((root->val==a||root->val==b)&&(right||left)) return right?right:left;
-	// only found one. 
-	if(root->val==a||root->val==b) return 1;
-
-	//both one side. both no side. one side. 
-	if(left&&right) return left+right-1;
-	if(left==0&&right==0) return 0;//not found yet.
-	return left?left+1:right+1;
+	if(!root) return 0;
+	int left=dist(root->left, a, b,len);
+	int right=dist(root->right,a, b, len);
+	
+	if(left>0&&right>0) return len=left+right;
+	if(root->val==a||root->val==b)
+	{
+		if(left||right) return len=left+right;
+		return 1;
+	}
+	if(left) return left+1;
+	if(right) return right+1;
+	return 0;
 }
 
 int main()
 {
-	node* root=nullptr;
-	add(root,8);
-	add(root,2);
-	add(root,20);
-	add(root,14);
-	add(root,16);
+	//      6 
+	//  3        8
+	//1  4   7    9
+	// 2   5
+	//
+	TreeNode* root=nullptr;
 	add(root,6);
+	add(root,3);
+	add(root,8);
+	add(root,1);
 	add(root,4);
-	add(root,0);
-	add(root,18);
-	travel(root);
-	cout<<endl;
+	add(root,7);
+	add(root,9);
+	add(root,2);
+	add(root,5);
 	
-	cout<<distance(root,0,8)<<endl;	
-	cout<<distance(root,4,18)<<endl;	
-	cout<<distance(root,6,16)<<endl;	
+	print(root);
+	cout<<endl;
+	cout<<"__"<<endl;
+	cout<<find(root,10)<<endl;
+	cout<<find(root,1)<<endl;
+	cout<<find(root,2)<<endl;
+	cout<<"__"<<endl;
+	cout<<endl;
+
+	cout<<"-----"<<endl;
+	for(int i=2;i<=9;i+=2)
+	{
+		for(int j=1;j<9;j+=2)
+		{
+			int len=0;
+			dist(root,i,j,len);
+			cout<<i<<" "<<j<<" "<<len<<endl;
+		}
+	}
+	cout<<"-----"<<endl;
+	for(int i=1;i<=9;++i)
+	{
+		erase(root,i);
+		print(root);
+		cout<<endl;
+	}
 }
